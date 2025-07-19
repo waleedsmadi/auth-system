@@ -1,0 +1,14 @@
+/* Forms */
+.sign-up {
+    width: 500px;
+    margin: 20px auto;
+    background-color: #f8f7f7;
+    padding: 20px;
+    border-radius: 10px;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    -ms-border-radius: 10px;
+    -o-border-radius: 10px;
+    box-shadow: 0px 1px 18px 3px #00000040;
+}
+/* //Forms// */
