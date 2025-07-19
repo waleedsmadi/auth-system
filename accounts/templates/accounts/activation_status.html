@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}Activation Message{% endblock title %}
+
+
+{% block content %}
+{% if send_link %}
+    <div class="card text-center">
+    <div class="card-header">{{send_link}}</div>
+    <div class="card-body">
+        <p class="card-text">The account activation link has been sent to your email:<b>{{user.email}}</b><br>Please check your email.</p>
+        <a href="{% url 'accounts:reactive_account' user.email_token %}" class="btn btn-primary">Re-send</a>
+    </div>
+    </div>
+{% elif invalid_token %}
+    <div class="card text-center">
+    <div class="card-header">{{invalid_token}}</div>
+    <div class="card-body">
+        <p class="card-text">This link is no longer valid. Your account may have already been activated.</p>
+        <a href="{% url 'accounts:login' %}" class="btn btn-primary">Login</a>
+    </div>
+    </div>
+{% elif expired_time %}
+    <div class="card text-center">
+    <div class="card-header">{{expired_time}}</div>
+    <div class="card-body">
+        <p class="card-text">Your account activation time has expired. Please resend a new activation link by clicking the button below.</p>
+        <a href="{% url 'accounts:reactive_account' token %}" class="btn btn-primary">Re-send</a>
+    </div>
+    </div>
+{% elif verified %}
+    <div class="card text-center">
+    <div class="card-header">{{verified}}</div>
+    <div class="card-body">
+        <p class="card-text">This account has already been activated. Please log in.</p>
+        <a href="{% url 'accounts:login' %}" class="btn btn-primary">Login</a>
+    </div>
+    </div>
+{% endif %}
+{% endblock content %}

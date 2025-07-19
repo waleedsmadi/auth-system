@@ -17,7 +17,7 @@ class MyUser(models.Model):
     img = models.ImageField(null=True, blank=True)
     creation_date = models.DateTimeField(auto_now_add=True)
     email_token = models.UUIDField(default=uuid4, unique=True, editable=False)
-    is_verified = models.BooleanField(default=True)
+    is_verified = models.BooleanField(default=False)
 
     class Meta:
         ordering = ['-creation_date']
