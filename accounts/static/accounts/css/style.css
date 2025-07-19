@@ -11,6 +11,18 @@
     -o-border-radius: 10px;
     box-shadow: 0px 1px 18px 3px #00000040;
 }
+
+.login {
+    width: 500px;
+    padding: 20px;
+    margin: 150px auto;
+    border-radius: 10px;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    -ms-border-radius: 10px;
+    -o-border-radius: 10px;
+    background-color: #f8f7f7;
+}
 /* //Forms// */
 
 

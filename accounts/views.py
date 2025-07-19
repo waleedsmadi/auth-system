@@ -1,12 +1,14 @@
 from django.shortcuts import render, redirect
-from .forms import SignUpModelForm
+from .forms import SignUpModelForm, LoginForm
 from .models import MyUser
-from django.contrib.auth.hashers import make_password
+from django.contrib.auth.hashers import make_password, check_password
 from django.core.mail import send_mail
 from django.conf import settings
 from uuid import uuid4
 from django.utils import timezone
 from datetime import timedelta
+from django.db.models import Q
+from django.contrib import messages
 
 
 def sign_up(request):
@@ -64,4 +66,30 @@ def active_account(request, token):
 
 
 def login(request):
-    return render(request, 'accounts/login.html')
+    if request.method == 'POST':
+        form = LoginForm(request.POST)
+        if form.is_valid():
+            username = form.cleaned_data['username']
+
+            try:
+                user = MyUser.objects.get(Q(username=username) | Q(email=username))
+            except:
+                messages.error(request, 'Invalid email or password!')
+                return redirect('accounts:login')
+            
+            
+            password = form.cleaned_data['password']
+            if not check_password(password, user.password):
+                messages.error(request, 'Invalid email or password!')
+                return redirect('accounts:login')
+            
+            if not user.is_verified:
+                messages.error(request, 'This account has not been activated yet!')
+                return redirect('accounts:login')
+            
+            request.session['user_id'] = user.id
+            return redirect('pages:index')
+
+    else:
+        form = LoginForm()
+    return render(request, 'accounts/login.html', {'login_form': form})

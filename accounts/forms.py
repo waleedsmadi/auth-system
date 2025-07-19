@@ -49,3 +49,18 @@ class SignUpModelForm(forms.ModelForm):
                 'style': 'margin-bottom: 14px'
             }),
         }
+
+
+
+class LoginForm(forms.Form):
+    username = forms.CharField(max_length=100, widget=forms.TextInput(attrs={
+        'placeholder': 'Username/Email...',
+        'class': 'form-control',
+        'style': 'margin-bottom: 15px',
+    }))
+
+    password = forms.CharField(max_length=100, widget=forms.PasswordInput(attrs={
+        'placeholder': 'Password...',
+        'class': 'form-control',
+        'style': 'margin-bottom: 15px',
+    }))

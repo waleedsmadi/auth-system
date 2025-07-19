@@ -1,1 +1,20 @@
-<h2>Login</h2>
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Login{% endblock title %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'accounts/css/style.css' %}"> 
+{% endblock extra_css %}
+
+{% block content %}
+    <form class="login" method="post">
+        {% csrf_token %}
+        {{login_form}}
+        {% if messages %}
+            {% for msg in messages %}
+                <div class="alert alert-{{msg.tags}}">{{msg}}</div>
+            {% endfor %}
+        {% endif %}
+        <button class="btn bg-info w-100" type="submit" >Login</button>
+    </form>
+{% endblock content %}

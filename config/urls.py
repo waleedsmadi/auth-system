@@ -7,4 +7,5 @@ urlpatterns = [
     path('grappelli/', include('grappelli.urls')),
     path('admin/', admin.site.urls),
     path('', include('accounts.urls', namespace='accounts')),
+    path('', include('pages.urls', namespace='pages')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
