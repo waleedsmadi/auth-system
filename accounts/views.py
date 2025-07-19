@@ -36,7 +36,7 @@ def send_token_email(user):
 def resend_token_email(request, token):
     user = MyUser.objects.get(email_token=token)
     if user.is_verified:
-        return render(request, 'accounts/activation_status.html', {'verified': 'The account is activated'})
+        return render(request, 'accounts/activation_status.html', {'verified': 'The  accountis activated'})
     
     user.email_token = uuid4()
     user.creation_date = timezone.now()
