@@ -6,15 +6,22 @@
 <link rel="stylesheet" href="{% static 'accounts/css/style.css' %}">
 {% endblock extra_css %}
 
+{% block extra_js %}
+<script src="{% static 'accounts/js/script.js' %}"></script>
+{% endblock extra_js %}
+
 {% block content %}
 {% if send_link %}
+
     <div class="activation card text-center">
-    <div class="card-header">{{send_link}}</div>
-    <div class="card-body">
-        <p class="card-text">The account activation link has been sent to your email:<b>{{user.email}}</b><br>Please check your email.</p>
-        <a href="{% url 'accounts:reactive_account' user.email_token %}" class="btn btn-primary">Re-send</a>
+        <div class="card-header">{{send_link}}</div>
+        <div class="card-body">
+            <p class="card-text">The account activation link has been sent to your email:<b>{{user.email}}</b><br>Please check your email.</p>
+            <a id="resend-btn" href="{% url 'accounts:reactive_account' user.email_token %}" class="btn btn-primary">Re-send</a>
+        </div>
     </div>
-    </div>
+
+
 {% elif invalid_token %}
     <div class="activation card text-center">
     <div class="card-header">{{invalid_token}}</div>

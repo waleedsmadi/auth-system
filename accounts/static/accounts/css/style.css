@@ -31,4 +31,15 @@
     width: 500px;
     margin: 100px auto;
 }
+
+.disabled {
+    pointer-events: none;
+    background-color: grey;
+}
+
+.activation a,
+.activation button {
+    display: inline-block;
+    width: 85.22px;
+}
 /* //activation_status.html // */
