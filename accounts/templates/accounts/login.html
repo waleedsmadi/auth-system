@@ -7,7 +7,7 @@
 {% endblock extra_css %}
 
 {% block content %}
-    <form class="login" method="post">
+    <form class="form login" method="post">
         {% csrf_token %}
         {{login_form}}
         {% if messages %}
