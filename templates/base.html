@@ -10,7 +10,7 @@
 </head>
 <body>
      
-    {% if request.session.user_id %}
+    {% if is_logged_in %}
         {% include "parts/navbar.html" %}
     {% endif %}
 

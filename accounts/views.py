@@ -93,3 +93,10 @@ def login(request):
     else:
         form = LoginForm()
     return render(request, 'accounts/login.html', {'login_form': form})
+
+
+
+def logout(request):
+    if request.session.get('user_id'):
+        request.session.flush()
+    return redirect('accounts:login')
