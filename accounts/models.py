@@ -14,7 +14,7 @@ class MyUser(models.Model):
     password = models.CharField(max_length=255)
     birth_date = models.DateField()
     gender = models.CharField(max_length=6, choices=Gender.choices)
-    img = models.ImageField(null=True, blank=True)
+    img = models.ImageField(upload_to='profile-images/%Y-%m-%d', null=True, blank=True)
     creation_date = models.DateTimeField(auto_now_add=True)
     email_token = models.UUIDField(default=uuid4, unique=True, editable=False)
     is_verified = models.BooleanField(default=False)
