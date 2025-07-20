@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Edit Profile{% endblock title %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'accounts/css/style.css' %}"> 
+{% endblock extra_css %}
+
+{% block content %}
+    <form class="form edit-profile-form" method="post">
+        {% csrf_token %}
+        {{edit_form}}
+        <button class="btn bg-info w-100" type="submit" >Save Changes</button>
+    </form>
+{% endblock content %}

@@ -11,7 +11,7 @@
     -o-border-radius: 10px;
 }
 
-.sign-up {margin: 20px auto;}
+.sign-up, .edit-profile-form {margin: 20px auto;}
 
 .login {margin: 150px auto;}
 /* //Forms// */

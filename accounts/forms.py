@@ -64,3 +64,45 @@ class LoginForm(forms.Form):
         'class': 'form-control',
         'style': 'margin-bottom: 15px',
     }))
+
+
+class EditProfileModelForm(forms.ModelForm):
+
+    class Meta:
+        model = MyUser
+        fields = ['first_name', 'last_name', 'email', 'birth_date', 'gender']
+        widgets = {
+            'first_name': forms.TextInput(attrs={
+                'placeholder': 'First Name...',
+                'style': 'margin-bottom: 15px',
+                'class': 'form-control',
+            }),
+
+
+            'last_name': forms.TextInput(attrs={
+                'placeholder': 'Last Name...',
+                'style': 'margin-bottom: 15px',
+                'class': 'form-control',
+            }),
+
+
+            'email': forms.EmailInput(attrs={
+                'placeholder': 'Email...',
+                'style': 'margin-bottom: 15px',
+                'class': 'form-control',
+            }),
+
+
+            'birth_date': forms.DateInput(attrs={
+                'style': 'margin-bottom: 15px',
+                'class': 'form-control',
+                'type': 'date',
+            }),
+
+
+            'gender': forms.Select(attrs={
+                'style': 'margin-bottom: 15px',
+                'class': 'form-select',
+            }),
+
+        }

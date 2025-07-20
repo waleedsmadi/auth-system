@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .forms import SignUpModelForm, LoginForm
+from .forms import SignUpModelForm, LoginForm, EditProfileModelForm
 from .models import MyUser
 from django.contrib.auth.hashers import make_password, check_password
 from django.core.mail import send_mail
@@ -100,3 +100,17 @@ def logout(request):
     if request.session.get('user_id'):
         request.session.flush()
     return redirect('accounts:login')
+
+
+def edit_profile(request):
+    user_id = request.session.get('user_id')
+    user = MyUser.objects.get(id=user_id)
+    if request.method == 'POST':
+        form = EditProfileModelForm(data=request.POST, instance=user)
+        if form.is_valid():
+            form.save()
+            return redirect('pages:index')
+    else:
+        form = EditProfileModelForm(instance=user)
+    
+    return render(request, 'accounts/edit_profile.html', {'edit_form': form})
