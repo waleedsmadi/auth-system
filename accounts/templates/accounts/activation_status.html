@@ -6,9 +6,6 @@
 <link rel="stylesheet" href="{% static 'accounts/css/style.css' %}">
 {% endblock extra_css %}
 
-{% block extra_js %}
-<script src="{% static 'accounts/js/script.js' %}"></script>
-{% endblock extra_js %}
 
 {% block content %}
 {% if send_link %}
@@ -20,6 +17,30 @@
             <a id="resend-btn" href="{% url 'accounts:reactive_account' user.email_token %}" class="btn btn-primary">Re-send</a>
         </div>
     </div>
+    {% block extra_js %}
+        <script>
+            // Re send button counter to make it enabled
+            window.onload = () => {
+
+            let btn = document.getElementById('resend-btn');
+
+            btn.classList.add('disabled');
+            btn.textContent = '';
+            for(let i=10; i>=1; i--){
+
+                setTimeout(()=> {
+                    btn.textContent = i;
+                }, (10 - i) * 1000)
+            }
+
+            setTimeout(function() {
+                btn.textContent = `Re-send`;
+                btn.classList.remove('disabled');
+            }, 10000)
+
+            }
+        </script>
+    {% endblock extra_js %}
 
 
 {% elif invalid_token %}
