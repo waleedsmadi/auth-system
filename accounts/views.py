@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from .forms import SignUpModelForm, LoginForm, EditProfileModelForm, ChangePasswordForm
 from .models import MyUser
 from django.contrib.auth.hashers import make_password, check_password
@@ -154,3 +154,8 @@ def change_password(request):
     else:
         form = ChangePasswordForm()
     return render(request, 'accounts/change_password.html', {'change_password_form': form})
+
+
+def view_account(request, username):
+    user = get_object_or_404(MyUser, username=username)
+    return render(request, 'accounts/account.html', {"user": user})

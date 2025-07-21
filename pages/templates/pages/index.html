@@ -10,14 +10,14 @@
     {% for post in posts %}
         <div class="card mb-3">
             <div class="card-header d-flex align-items-center">
-                <a href="" style="text-decoration: none;">
+                <a href="{% url 'accounts:view_account' post.author.username %}" style="text-decoration: none;">
                     {% if not post.author.img %}
                         <img src="{% static 'images/default-profile-pic.jpg' %}" alt="profile-pic" width="40px" height="40px" style="border-radius: 50%;">
                     {% else %}
                         <img src="{{post.author.img.url}}" alt="profile-pic" width="40px" height="40px" style="border-radius: 50%;">
                     {% endif %}
                 </a>
-                <a href="" style="text-decoration: none; color: initial; margin-left: 7px;">{{post.author.first_name}} {{post.author.last_name}}</a>
+                <a href="{% url 'accounts:view_account' post.author.username %}" style="text-decoration: none; color: initial; margin-left: 7px;">{{post.author.first_name}} {{post.author.last_name}}</a>
 
                 <small class="text-muted ms-auto">Last updated {{post.updated_date}}</small>
             </div>
