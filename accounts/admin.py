@@ -7,3 +7,4 @@ class MyUserAdmin(admin.ModelAdmin):
     list_display_links = ['username', 'email']
     search_fields = ['username', 'email']
     list_filter = ['gender', 'birth_date']
+    readonly_fields = ['password']
