@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .forms import SignUpModelForm, LoginForm, EditProfileModelForm
+from .forms import SignUpModelForm, LoginForm, EditProfileModelForm, ChangePasswordForm
 from .models import MyUser
 from django.contrib.auth.hashers import make_password, check_password
 from django.core.mail import send_mail
@@ -114,3 +114,42 @@ def edit_profile(request):
         form = EditProfileModelForm(instance=user)
     
     return render(request, 'accounts/edit_profile.html', {'edit_form': form})
+
+
+
+def change_password(request):
+
+    user_id = request.session.get('user_id')
+    user = MyUser.objects.get(id=user_id)
+    if request.method == 'POST':
+        form = ChangePasswordForm(data=request.POST)
+
+        if form.is_valid():
+            password = form.cleaned_data['current_password']
+            new_password = form.cleaned_data['new_password']
+            confirm_password = form.cleaned_data['confirm_password']
+
+            # Check if current password is invalid
+            if not check_password(password, user.password):
+                messages.error(request, 'Current password is invalid!')
+                return redirect('accounts:change_password')
+            
+            # Check if new password and current password are similar
+            elif check_password(new_password, user.password):
+                messages.error(request, 'The new and current passwords are similar!')
+                return redirect('accounts:change_password')
+            
+            # Check if confirm password and new password are not the same!
+            elif new_password != confirm_password:
+                messages.error(request, 'Confirm password does not match the new password!')
+                return redirect('accounts:change_password')
+            
+            # change the password (hash)
+            else:
+                user.password = make_password(new_password)
+                user.save()
+                messages.success(request, 'Password has been changed!')
+                return redirect('accounts:change_password')
+    else:
+        form = ChangePasswordForm()
+    return render(request, 'accounts/change_password.html', {'change_password_form': form})

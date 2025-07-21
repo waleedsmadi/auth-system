@@ -107,3 +107,24 @@ class EditProfileModelForm(forms.ModelForm):
             }),
 
         }
+
+
+
+class ChangePasswordForm(forms.Form):
+    current_password = forms.CharField(max_length=100, widget=forms.PasswordInput(attrs={
+        'placeholder': 'Current Password...',
+        'class': 'form-control',
+        'style': 'margin-bottom: 15px',
+    }))
+
+    new_password = forms.CharField(max_length=100, widget=forms.PasswordInput(attrs={
+        'placeholder': 'New Password...',
+        'class': 'form-control',
+        'style': 'margin-bottom: 15px',
+    }))
+
+    confirm_password = forms.CharField(max_length=100, widget=forms.PasswordInput(attrs={
+        'placeholder': 'Confirm Password...',
+        'class': 'form-control',
+        'style': 'margin-bottom: 15px',
+    }))

@@ -11,7 +11,14 @@
     -o-border-radius: 10px;
 }
 
-.sign-up, .edit-profile-form {margin: 20px auto;}
+
+.sign-up,
+.edit-profile-form,
+.change-password-form
+{
+    margin: 20px auto;
+}
+
 
 .login {margin: 150px auto;}
 /* //Forms// */
