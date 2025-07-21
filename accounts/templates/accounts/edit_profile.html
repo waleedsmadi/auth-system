@@ -7,9 +7,47 @@
 {% endblock extra_css %}
 
 {% block content %}
-    <form class="form edit-profile-form" method="post">
+    <form id="edit-profile-form" data-user="{{user}}" class="form edit-profile-form" method="post">
         {% csrf_token %}
         {{edit_form}}
-        <button class="btn bg-info w-100" type="submit" >Save Changes</button>
+        <button id="save-changes-btn" class="btn bg-info w-100" disabled="false" type="submit" >Save Changes</button>
     </form>
 {% endblock content %}
+
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function(){
+
+        let originalValues = {};
+        const inputs = document.querySelectorAll('.edit-input');
+        const saveBtn = document.getElementById('save-changes-btn');
+
+
+        inputs.forEach((element) => {
+            originalValues[element.name] = element.value;
+        })
+
+
+        function checkCanges()
+        {
+            for(let input of inputs){
+                if (input.value !== originalValues[input.name]) {
+                    saveBtn.disabled = false;
+                    return;
+                }
+            }
+            saveBtn.disabled = true;
+        }
+
+
+        inputs.forEach(element => {
+            if(element.tagName === 'INPUT') {
+                element.addEventListener('input', checkCanges)
+            } else if(element.tagName === 'SELECT') {
+                element.addEventListener('change', checkCanges)
+            }
+        })
+    })
+</script>
+{% endblock extra_js %}

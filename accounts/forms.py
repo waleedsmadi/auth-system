@@ -75,34 +75,35 @@ class EditProfileModelForm(forms.ModelForm):
             'first_name': forms.TextInput(attrs={
                 'placeholder': 'First Name...',
                 'style': 'margin-bottom: 15px',
-                'class': 'form-control',
+                'class': 'form-control edit-input',
+
             }),
 
 
             'last_name': forms.TextInput(attrs={
                 'placeholder': 'Last Name...',
                 'style': 'margin-bottom: 15px',
-                'class': 'form-control',
+                'class': 'form-control edit-input',
             }),
 
 
             'email': forms.EmailInput(attrs={
                 'placeholder': 'Email...',
                 'style': 'margin-bottom: 15px',
-                'class': 'form-control',
+                'class': 'form-control edit-input',
             }),
 
 
             'birth_date': forms.DateInput(attrs={
                 'style': 'margin-bottom: 15px',
-                'class': 'form-control',
+                'class': 'form-control edit-input',
                 'type': 'date',
             }),
 
 
             'gender': forms.Select(attrs={
                 'style': 'margin-bottom: 15px',
-                'class': 'form-select',
+                'class': 'form-select edit-input',
             }),
 
         }
