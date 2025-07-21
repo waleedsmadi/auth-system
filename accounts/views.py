@@ -9,7 +9,7 @@ from django.utils import timezone
 from datetime import timedelta
 from django.db.models import Q
 from django.contrib import messages
-
+from core.decorators import required_login
 
 def sign_up(request):
     if request.method == 'POST':
@@ -102,6 +102,7 @@ def logout(request):
     return redirect('accounts:login')
 
 
+@required_login
 def edit_profile(request):
     user_id = request.session.get('user_id')
     user = MyUser.objects.get(id=user_id)
@@ -116,7 +117,7 @@ def edit_profile(request):
     return render(request, 'accounts/edit_profile.html', {'edit_form': form})
 
 
-
+@required_login
 def change_password(request):
 
     user_id = request.session.get('user_id')
