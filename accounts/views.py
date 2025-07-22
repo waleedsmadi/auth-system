@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
 from .forms import *
-from .models import MyUser
+from .models import MyUser, AuthToken
 from django.contrib.auth.hashers import make_password, check_password
 from django.core.mail import send_mail
 from django.conf import settings
@@ -11,7 +11,7 @@ from datetime import timedelta
 from django.db.models import Q
 from django.contrib import messages
 from core.decorators import required_login
-import time
+import secrets
 
 def sign_up(request):
     if request.method == 'POST':
@@ -65,8 +65,6 @@ def active_account(request, token):
     return redirect('accounts:login')
 
 
-
-
 def login(request):
     if request.method == 'POST':
         form = LoginForm(request.POST)
@@ -89,8 +87,12 @@ def login(request):
                 messages.error(request, 'This account has not been activated yet!')
                 return redirect('accounts:login')
             
-            request.session['user_id'] = user.id
-            return redirect('pages:index')
+            token = secrets.token_urlsafe(32)
+            auth_token = AuthToken(key=token, user=user)
+            auth_token.save()
+            response = redirect('pages:index')
+            response.set_cookie('auth_token', token, httponly=True, max_age=60*60*24*30)
+            return response
 
     else:
         form = LoginForm()
@@ -99,15 +101,20 @@ def login(request):
 
 
 def logout(request):
-    if request.session.get('user_id'):
-        request.session.flush()
-    return redirect('accounts:login')
+    token = request.COOKIES.get('auth_token')
+    if token:
+        AuthToken.objects.filter(key=token).delete()
+    
+    response = redirect('accounts:login')
+    response.delete_cookie('auth_token')
+    return response
+
+
 
 
 @required_login
 def edit_profile(request):
-    user_id = request.session.get('user_id')
-    user = MyUser.objects.get(id=user_id)
+    user = request.user
     if request.method == 'POST':
         form = EditProfileModelForm(data=request.POST, instance=user)
         if form.is_valid():
@@ -119,11 +126,12 @@ def edit_profile(request):
     return render(request, 'accounts/edit_profile.html', {'edit_form': form})
 
 
+
+
 @required_login
 def change_password(request):
 
-    user_id = request.session.get('user_id')
-    user = MyUser.objects.get(id=user_id)
+    user = request.user
     if request.method == 'POST':
         form = ChangePasswordForm(data=request.POST)
 
@@ -158,11 +166,15 @@ def change_password(request):
     return render(request, 'accounts/change_password.html', {'change_password_form': form})
 
 
+
+
 @required_login
 def view_account(request, username):
     user = get_object_or_404(MyUser, username=username)
     posts = user.posts.all()
     return render(request, 'accounts/account.html', {"user": user, 'posts': posts})
+
+
 
 
 def find_account(request):
@@ -186,6 +198,8 @@ def find_account(request):
         form = FindAccountForm()
     return render(request, 'accounts/find_account.html', {'find_account_form': form})
 
+
+
 def confirm_code(request, reset_uuid):
     try:
         user = MyUser.objects.get(reset_uuid=reset_uuid)
@@ -204,6 +218,9 @@ def confirm_code(request, reset_uuid):
         form = ConfirmCodeForm()
     
     return render(request, 'accounts/confirm_code.html', {'confirm_code_form': form})
+
+
+
 
 def reset_password(request, confirm_code):
     try:
@@ -231,6 +248,8 @@ def reset_password(request, confirm_code):
         form = ResetPasswordForm()
     return render(request, 'accounts/reset_password.html', {'reset_password_form': form})
     
+
+
     
 def send_reset_password_code(user):
     subject = 'Reset Your Password'

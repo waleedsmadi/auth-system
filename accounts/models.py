@@ -27,4 +27,12 @@ class MyUser(models.Model):
     
     def __str__(self):
         return self.username
-    
+
+
+class AuthToken(models.Model):
+    key = models.CharField(max_length=255, blank=True, null=True, unique=True)
+    user = models.ForeignKey(MyUser, on_delete=models.CASCADE)
+
+
+    def __str__(self):
+        return self.user.username
