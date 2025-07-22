@@ -159,4 +159,5 @@ def change_password(request):
 @required_login
 def view_account(request, username):
     user = get_object_or_404(MyUser, username=username)
-    return render(request, 'accounts/account.html', {"user": user})
+    posts = user.posts.all()
+    return render(request, 'accounts/account.html', {"user": user, 'posts': posts})
