@@ -156,6 +156,7 @@ def change_password(request):
     return render(request, 'accounts/change_password.html', {'change_password_form': form})
 
 
+@required_login
 def view_account(request, username):
     user = get_object_or_404(MyUser, username=username)
     return render(request, 'accounts/account.html', {"user": user})
