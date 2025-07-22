@@ -53,13 +53,13 @@ class SignUpModelForm(forms.ModelForm):
 
 
 class LoginForm(forms.Form):
-    username = forms.CharField(max_length=100, widget=forms.TextInput(attrs={
+    username = forms.CharField(max_length=100, label='', widget=forms.TextInput(attrs={
         'placeholder': 'Username/Email...',
         'class': 'form-control',
         'style': 'margin-bottom: 15px',
     }))
 
-    password = forms.CharField(max_length=100, widget=forms.PasswordInput(attrs={
+    password = forms.CharField(max_length=100, label='', widget=forms.PasswordInput(attrs={
         'placeholder': 'Password...',
         'class': 'form-control',
         'style': 'margin-bottom: 15px',
@@ -126,5 +126,39 @@ class ChangePasswordForm(forms.Form):
     confirm_password = forms.CharField(max_length=100, widget=forms.PasswordInput(attrs={
         'placeholder': 'Confirm Password...',
         'class': 'form-control',
+        'style': 'margin-bottom: 15px',
+    }))
+
+
+class FindAccountForm(forms.Form):
+    email = forms.CharField(max_length=150, label='', widget=forms.EmailInput(attrs={
+        'placeholder': 'Email ...',
+        'class': 'form-control',
+        'style': 'margin-bottom: 15px',
+        'id': 'find-account-input',
+    }))
+
+
+
+class ConfirmCodeForm(forms.Form):
+    confirm_code = forms.CharField(max_length=6, label='', widget=forms.TextInput(attrs={
+        'placeholder': 'Confirm Code...',
+        'class': 'form-control',
+        'style': 'margin-bottom: 15px',
+        'id': 'confirm-code-input',
+    }))
+
+
+
+class ResetPasswordForm(forms.Form):
+    new_password = forms.CharField(max_length=100, label='', widget=forms.PasswordInput(attrs={
+        'placeholder': 'New password...',
+        'class': 'form-control reset-password-input',
+        'style': 'margin-bottom: 15px',
+    }))
+
+    confirm_password = forms.CharField(max_length=100, label='', widget=forms.PasswordInput(attrs={
+        'placeholder': 'Confrim password...',
+        'class': 'form-control reset-password-input',
         'style': 'margin-bottom: 15px',
     }))

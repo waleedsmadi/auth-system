@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .forms import SignUpModelForm, LoginForm, EditProfileModelForm, ChangePasswordForm
+from django.http import HttpResponse
+from .forms import *
 from .models import MyUser
 from django.contrib.auth.hashers import make_password, check_password
 from django.core.mail import send_mail
@@ -10,6 +11,7 @@ from datetime import timedelta
 from django.db.models import Q
 from django.contrib import messages
 from core.decorators import required_login
+import time
 
 def sign_up(request):
     if request.method == 'POST':
@@ -161,3 +163,76 @@ def view_account(request, username):
     user = get_object_or_404(MyUser, username=username)
     posts = user.posts.all()
     return render(request, 'accounts/account.html', {"user": user, 'posts': posts})
+
+
+def find_account(request):
+    if request.method == 'POST':
+        form = FindAccountForm(data=request.POST)
+        if form.is_valid():
+            try:
+                user = MyUser.objects.get(email=form.cleaned_data['email'])
+            except MyUser.DoesNotExist:
+                messages.error(request, 'No result: this email does not exists, please try with another email!')
+                return redirect('accounts:find_account')
+            
+            reset_uuid = uuid4()
+            code = uuid4().hex[:6]
+            user.confirm_code = code
+            user.reset_uuid = reset_uuid
+            user.save()
+            send_reset_password_code(user)
+            return redirect('accounts:confirm_code', reset_uuid=reset_uuid)
+    else:
+        form = FindAccountForm()
+    return render(request, 'accounts/find_account.html', {'find_account_form': form})
+
+def confirm_code(request, reset_uuid):
+    try:
+        user = MyUser.objects.get(reset_uuid=reset_uuid)
+    except MyUser.DoesNotExist:
+        return HttpResponse('Does not exist!')
+    
+    if request.method == 'POST':
+        form = ConfirmCodeForm(data=request.POST)
+        if form.is_valid():
+            if user.confirm_code == form.cleaned_data['confirm_code']:
+                return redirect('accounts:reset_password', confirm_code=user.confirm_code)
+            
+            messages.error(request, 'error')
+            return redirect('accounts:confirm_code', reset_uuid)
+    else:
+        form = ConfirmCodeForm()
+    
+    return render(request, 'accounts/confirm_code.html', {'confirm_code_form': form})
+
+def reset_password(request, confirm_code):
+    try:
+        user = MyUser.objects.get(confirm_code=confirm_code)
+    except MyUser.DoesNotExist:
+        return HttpResponse('Invalid link!')
+
+    if request.method == 'POST':
+        form = ResetPasswordForm(data=request.POST)
+        if form.is_valid():
+            new_password = form.cleaned_data['new_password']
+            confirm_password = form.cleaned_data['confirm_password']
+
+            if confirm_password != new_password:
+                messages.error(request, 'Confirm password does not match the new password!')
+                return redirect('accounts:reset_password', confirm_code=user.confirm_code)
+            else:
+                user.password = make_password(form.cleaned_data['new_password'])
+                user.reset_uuid = None
+                user.confirm_code = None
+                user.save()
+                return redirect('accounts:login')
+                
+    else:
+        form = ResetPasswordForm()
+    return render(request, 'accounts/reset_password.html', {'reset_password_form': form})
+    
+    
+def send_reset_password_code(user):
+    subject = 'Reset Your Password'
+    message = f'Hello {user.first_name}\nYour confirm code is: {user.confirm_code}'
+    send_mail(subject, message, settings.EMAIL_HOST_USER, [user.email])

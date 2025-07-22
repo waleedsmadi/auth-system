@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Forgot Password{% endblock title %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'accounts/css/style.css' %}"> 
+{% endblock extra_css %}
+
+{% block content %}
+    <form  class="form confirm-code-form" method="POST">
+        {% csrf_token %}
+        <h4 class="bold">Confirm Code</h4>
+        <hr>
+        <p>
+            Please check your email we send confirm code contains 6 digits
+        </p>
+        {{confirm_code_form}}
+        {% if messages %}
+            {% for msg in messages %}
+                <div class="alert alert-{{msg.tags}}" >{{msg}}</div>
+            {% endfor %}
+        {% endif %}
+        <button id="confirm-code-btn" class="btn bg-info w-100" disabled="true" type="submit" >Confirm code</button>
+    </form>
+{% endblock content %}
+
+
+
+{% block extra_js %}
+<!-- script for enabled/deiabled the find account button! -->
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const confirmCodeBtn = document.getElementById('confirm-code-btn');
+
+        document.getElementById('confirm-code-input').addEventListener('input', function(){
+            if (this.value.length === 6){
+                confirmCodeBtn.disabled = false;
+            } else {
+                confirmCodeBtn.disabled = true;
+            }
+        });
+    })
+</script>
+{% endblock extra_js %}

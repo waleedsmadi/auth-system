@@ -20,7 +20,28 @@
 }
 
 
-.login {margin: 150px auto;}
+.login,
+.find-account-form,
+.confirm-code-form,
+.reset-password-form {
+    margin: 150px auto; 
+    width: 380px;
+}
+
+.login .forgot-password {
+    display: block;
+    width: fit-content;
+    margin: auto;
+    text-decoration: none;
+    margin-top: 15px;
+}
+
+.login .create-new-account-btn {
+    display: block;
+    width: 50%;
+    padding: 10px;
+    margin: auto;
+}
 /* //Forms// */
 
 

@@ -7,7 +7,7 @@
 {% endblock extra_css %}
 
 {% block content %}
-    <form class="form login" method="post">
+    <form class="form login" method="POST">
         {% csrf_token %}
         {{login_form}}
         {% if messages %}
@@ -16,5 +16,8 @@
             {% endfor %}
         {% endif %}
         <button class="btn bg-info w-100" type="submit" >Login</button>
+        <a href="{% url 'accounts:find_account' %}" class='forgot-password'>Forgot password?<a>
+        <hr>
+        <a href="{% url 'accounts:sign_up' %}" class="create-new-account-btn btn btn-primary">Create new account</a>
     </form>
 {% endblock content %}

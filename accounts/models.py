@@ -17,6 +17,8 @@ class MyUser(models.Model):
     img = models.ImageField(upload_to='profile-images/%Y-%m-%d', null=True, blank=True)
     creation_date = models.DateTimeField(auto_now_add=True)
     email_token = models.UUIDField(default=uuid4, unique=True, editable=False)
+    reset_uuid = models.UUIDField(null=True, blank=True, editable=False)
+    confirm_code = models.CharField(max_length=6, blank=True, null=True, editable=False)
     is_verified = models.BooleanField(default=False)
 
     class Meta:
